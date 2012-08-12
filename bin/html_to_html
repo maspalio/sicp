@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+
+use Modern::Perl;
+use XML::LibXML;
+
+for ( glob "src/OEBPS/*.html" ) {
+  say "Processing '$_' file...";
+  
+  if ( my $dom = XML::LibXML->load_xml ( location => $_ ) ) {
+    $_->setNodeName ( 'code' ) for $dom->findnodes ( '//tt' );
+    
+    $dom->toFile ( $_, 1 );
+
+    say "Done.";
+  }
+  else {
+    say "Failed!";
+  }
+}
